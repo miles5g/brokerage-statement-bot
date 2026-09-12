@@ -1,0 +1,10 @@
+[project]
+name = "brokerage-bot"
+version = "0.1.0"
+description = "Portfolio demo: synthetic brokerage statement updater (transfers → YTD map → journal)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+include = ["brokerage_bot"]

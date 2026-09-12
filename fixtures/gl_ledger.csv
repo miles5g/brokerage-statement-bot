@@ -1,0 +1,14 @@
+row_order,entity,gl_code,gl_name,prior_ledger,statement_ytd
+1,Wayne Family Trust,1200,Brokerage Cash,200000,270000
+2,Wayne Family Trust,1210,Equities,500000,550000
+3,Wayne Family Trust,1220,Fixed Income,100000,100000
+4,Wayne Family Trust,1230,Other Investments,0,
+5,Wayne Family Trust,2100,Margin Loan,-50000,-40000
+6,Wayne Family Trust,3100,Dividend Income,-8000,12000
+7,Wayne Family Trust,3200,Interest Income,-3000,5000
+8,Wayne Family Trust,3300,Realized Gain/Loss,-5000,8000
+9,Parker Holdings LLC,1200,Brokerage Cash,80000,115000
+10,Parker Holdings LLC,1210,Equities,200000,200000
+11,Parker Holdings LLC,2100,Margin Loan,-10000,-10000
+12,Parker Holdings LLC,3100,Dividend Income,-2000,6000
+13,Parker Holdings LLC,3200,Interest Income,0,1000
