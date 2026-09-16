@@ -113,6 +113,7 @@ def emit_walkthrough(
             continue
         print_banner(banner, pause=pause, file=file, input_fn=input_fn)
         print(summaries[key], file=out)
+        print(file=out)
     print("Wrote:", file=out)
     for path in written:
         print(f"  {path}", file=out)
