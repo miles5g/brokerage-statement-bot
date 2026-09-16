@@ -93,6 +93,7 @@ def print_banner(
     if pause:
         reader = input_fn if input_fn is not None else input
         reader("Press Enter to continue...")
+    print(file=out)
 
 
 def emit_walkthrough(
