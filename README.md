@@ -9,6 +9,14 @@ python3 -m unittest discover -s tests -v
 
 Writes transfer review, YTD paste column, and a balanced journal into `output/`. Stdlib Python 3.10+.
 
+**Interview walkthrough** — boxed stage hints between transfers → YTD map → journal:
+
+```bash
+python3 -m brokerage_bot --walkthrough
+```
+
+Press Enter after each box. Add `--no-pause` for CI (`python3 -m brokerage_bot --walkthrough --no-pause`). Default command above stays the fast 30-second demo.
+
 ---
 
 **Portfolio demo** — three-pass month-end pattern: transfers → YTD map → journal.
@@ -40,7 +48,7 @@ Artifacts: `output/transfers.csv`, `ytd_paste_column.txt`, `journal.csv`, `run_s
 
 ## Status
 
-Runnable. Tests cover transfer detection, row-order mapping, journal balance, and scrub guards.
+Runnable. Tests cover transfer detection, row-order mapping, journal balance, scrub guards, and walkthrough `--no-pause`.
 
 ## Author
 

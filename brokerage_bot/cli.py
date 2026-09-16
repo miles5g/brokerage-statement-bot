@@ -9,6 +9,7 @@ from pathlib import Path
 from brokerage_bot import __version__
 from brokerage_bot.amounts import format_dollars
 from brokerage_bot.pipeline import DEFAULT_FIXTURES, DEFAULT_OUTPUT, run_pipeline
+from brokerage_bot.walkthrough import emit_walkthrough
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -31,6 +32,20 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--activity", default=None, help="Override statement activity file")
     parser.add_argument("--ledger", default=None, help="Override GL workbook/CSV")
     parser.add_argument("--statement-ytd", default=None, help="Override statement YTD file")
+    parser.add_argument(
+        "-w",
+        "--walkthrough",
+        action="store_true",
+        help=(
+            "Interview mode: boxed stage hints between transfers → YTD map → "
+            "journal, pausing for Enter after each box."
+        ),
+    )
+    parser.add_argument(
+        "--no-pause",
+        action="store_true",
+        help="Skip Enter pauses (use with --walkthrough in CI).",
+    )
     parser.add_argument("--version", action="version", version=f"brokerage_bot {__version__}")
     return parser
 
@@ -46,34 +61,51 @@ def main(argv: list[str] | None = None) -> int:
     )
     # Individual pass names still run the full pipeline so journal always
     # has a mapped difference column; we just highlight that pass in stdout.
-    _print_report(args.pass_name, result)
+    if args.walkthrough:
+        emit_walkthrough(
+            args.pass_name,
+            _pass_summaries(result),
+            [str(Path(path)) for path in result.written],
+            pause=not args.no_pause,
+        )
+    else:
+        _print_report(args.pass_name, result)
     return 0
+
+
+def _pass_summaries(result) -> dict[str, str]:
+    review = sum(1 for line in result.transfers.lines if line.record_action == "REVIEW")
+    flipped = sum(1 for row in result.ytd.rows if row.sign_flipped)
+    missing = sum(1 for row in result.ytd.rows if row.missing_statement)
+    return {
+        "transfers": (
+            f"Transfers: {len(result.transfers.lines)} to record "
+            f"({review} review flags); "
+            f"{result.transfers.skipped_ordinary} ordinary lines skipped."
+        ),
+        "ytd": (
+            f"YTD map: {len(result.ytd.rows)} rows, 1:1 paste column; "
+            f"sign-flip on {flipped} income/gain rows; missing→0 on {missing}."
+        ),
+        "journal": (
+            f"Journal: {len(result.journal.lines)} lines; "
+            f"Dr {format_dollars(result.journal.total_debit)} = "
+            f"Cr {format_dollars(result.journal.total_credit)}; "
+            f"plug {format_dollars(result.journal.plug_amount)}."
+        ),
+    }
 
 
 def _print_report(pass_name: str, result) -> None:
     print("brokerage_bot — portfolio demo — SYNTHETIC DATA ONLY")
     print("Transfers pass does not update balances.")
+    summaries = _pass_summaries(result)
     if pass_name in {"all", "transfers"}:
-        review = sum(1 for line in result.transfers.lines if line.record_action == "REVIEW")
-        print(
-            f"Transfers: {len(result.transfers.lines)} to record "
-            f"({review} review flags); "
-            f"{result.transfers.skipped_ordinary} ordinary lines skipped."
-        )
+        print(summaries["transfers"])
     if pass_name in {"all", "ytd"}:
-        flipped = sum(1 for row in result.ytd.rows if row.sign_flipped)
-        missing = sum(1 for row in result.ytd.rows if row.missing_statement)
-        print(
-            f"YTD map: {len(result.ytd.rows)} rows, 1:1 paste column; "
-            f"sign-flip on {flipped} income/gain rows; missing→0 on {missing}."
-        )
+        print(summaries["ytd"])
     if pass_name in {"all", "journal"}:
-        print(
-            f"Journal: {len(result.journal.lines)} lines; "
-            f"Dr {format_dollars(result.journal.total_debit)} = "
-            f"Cr {format_dollars(result.journal.total_credit)}; "
-            f"plug {format_dollars(result.journal.plug_amount)}."
-        )
+        print(summaries["journal"])
     print("Wrote:")
     for path in result.written:
         print(f"  {Path(path)}")
