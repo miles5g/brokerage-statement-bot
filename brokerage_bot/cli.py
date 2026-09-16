@@ -13,7 +13,7 @@ from brokerage_bot.pipeline import DEFAULT_FIXTURES, DEFAULT_OUTPUT, run_pipelin
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="python -m brokerage_bot",
+        prog="python3 -m brokerage_bot",
         description=(
             "Synthetic brokerage statement updater (portfolio demo). "
             "Runs transfers → YTD map → journal. Does not post to a real ledger."

@@ -1,4 +1,4 @@
-"""Entry point for ``python -m brokerage_bot``."""
+"""Entry point for ``python3 -m brokerage_bot``."""
 
 from __future__ import annotations
 
