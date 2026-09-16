@@ -3,11 +3,11 @@
 **30-second demo**
 
 ```bash
-python -m brokerage_bot
-python -m unittest discover -s tests -v
+python3 -m brokerage_bot
+python3 -m unittest discover -s tests -v
 ```
 
-Writes transfer review, YTD paste column, and a balanced journal into `output/`. Stdlib Python only.
+Writes transfer review, YTD paste column, and a balanced journal into `output/`. Stdlib Python 3.10+.
 
 ---
 
@@ -33,7 +33,7 @@ Writes transfer review, YTD paste column, and a balanced journal into `output/`.
 ```bash
 git clone https://github.com/miles5g/brokerage-statement-bot.git
 cd brokerage-statement-bot
-python -m brokerage_bot
+python3 -m brokerage_bot
 ```
 
 Artifacts: `output/transfers.csv`, `ytd_paste_column.txt`, `journal.csv`, `run_summary.md`.
