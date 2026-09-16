@@ -37,8 +37,8 @@ def build_parser() -> argparse.ArgumentParser:
         "--walkthrough",
         action="store_true",
         help=(
-            "Interview mode: boxed stage hints between transfers → YTD map → "
-            "journal, pausing for Enter after each box."
+            "Interview mode: a short box before each pass. "
+            "Pauses for Enter; use --no-pause in CI."
         ),
     )
     parser.add_argument(

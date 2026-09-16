@@ -41,6 +41,38 @@ class WalkthroughBannerTests(unittest.TestCase):
             ["transfers", "ytd", "journal"],
         )
 
+    def test_copy_sounds_like_miles_not_a_deck(self):
+        blobs = [
+            " ".join((banner.title, *banner.lines, banner.say_this))
+            for banner in (SYNTHETIC, TRANSFERS, YTD_MAP, JOURNAL)
+        ]
+        text = "\n".join(blobs)
+        lowered = text.lower()
+        for phrase in (
+            "archaeology",
+            "vanity motion",
+            "shapes are boring",
+            "hottest work",
+            "controller-style",
+            "deterministic rules you can defend",
+            "workpaper",
+            "posting",
+            "posted",
+            "i keep the control file",
+            "i am isolating",
+        ):
+            self.assertNotIn(phrase, lowered, phrase)
+        self.assertEqual(
+            SYNTHETIC.say_this,
+            "All fake names and dollars — nothing from a real client.",
+        )
+        self.assertIn("All fake names and dollars — nothing from a real client.", SYNTHETIC.lines)
+        self.assertEqual(TRANSFERS.say_this, "Money in/out separate from dividends.")
+        self.assertIn("original list", text)
+        self.assertIn("I don't guess", text)
+        self.assertEqual(JOURNAL.say_this, "This part balances.")
+        self.assertIn("I'm", text)
+
 
 class WalkthroughCliTests(unittest.TestCase):
     def test_parser_accepts_short_and_long_walkthrough_and_no_pause(self):
