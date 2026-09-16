@@ -1,7 +1,7 @@
-"""Interview walkthrough banners for the three-pass demo.
+"""Interview walkthrough boxes for the three-pass demo.
 
-Boxed stage hints only — no employer SOP text. Synthetic data reminder
-prints first; then a short box before transfers, YTD map, and journal.
+Fake-data reminder first. Then a short box before transfers, YTD map,
+and journal. Talk-out-loud hints only — no firm SOP dump.
 """
 
 from __future__ import annotations
@@ -28,39 +28,41 @@ class StageBanner:
 SYNTHETIC = StageBanner(
     title="SYNTHETIC DATA — INTERVIEW DEMO",
     lines=(
-        "Comic-book names, masked accounts (****1234), dummy GLs.",
-        "Pattern demo only — it does not post to a real ledger.",
-        "Not affiliated with any employer, broker, or fund admin.",
+        "All fake names and dollars — nothing from a real client.",
+        "Bruce Wayne, masked accounts, dummy GLs.",
+        "Just a demo. I'm not touching real books.",
     ),
-    say_this="Everything on screen is made-up interview data.",
+    say_this="All fake names and dollars — nothing from a real client.",
 )
 
 TRANSFERS = StageBanner(
-    title="TRANSFERS — review list, not a posting",
+    title="TRANSFERS — money in/out",
     lines=(
-        "Wires, contributions/distributions, security transfers, paydowns.",
-        "Ordinary dividends, interest, and trades are skipped.",
-        "This pass does not update balances.",
+        "Wires, contributions, distributions, security transfers, paydowns.",
+        "Dividends, interest, and trades stay off this list.",
+        "I'm not changing balances. This is just the original list.",
     ),
-    say_this="I am isolating movements to record, not income.",
+    say_this="Money in/out separate from dividends.",
 )
 
 YTD_MAP = StageBanner(
-    title="YTD MAP — 1:1 paste column",
+    title="YTD MAP — same order as the original list",
     lines=(
-        "Statement/YTD figures line up with GL row order.",
-        "Missing cells become 0; 3000-series income/gain rows flip sign.",
+        "Statement numbers line up with the original list, row for row.",
+        "Blank cell? That's a 0. I don't guess.",
+        "Income/gain rows (the 3000s) flip sign so they match the books.",
     ),
-    say_this="The paste column matches the workpaper row for row.",
+    say_this="Same order as the original list. I don't guess.",
 )
 
 JOURNAL = StageBanner(
-    title="JOURNAL — difference to Debit/Credit",
+    title="JOURNAL — this part balances",
     lines=(
-        "Mapped minus prior becomes Dr/Cr lines, then a 9999 plug.",
-        "Debits equal credits so the entry would balance if posted.",
+        "New number minus old number. That's the debit or credit.",
+        "Then a 9999 plug so both sides match.",
+        "Debits equal credits. That's it.",
     ),
-    say_this="The journal is balanced before anything would post.",
+    say_this="This part balances.",
 )
 
 # Shown between transfers → YTD map → journal (after the synthetic opener).

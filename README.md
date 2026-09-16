@@ -9,7 +9,7 @@ python3 -m unittest discover -s tests -v
 
 Writes transfer review, YTD paste column, and a balanced journal into `output/`. Stdlib Python 3.10+.
 
-**Interview walkthrough** — boxed stage hints between transfers → YTD map → journal:
+**Interview walkthrough** — talk through transfers, YTD map, then journal. Hit Enter when you're ready for the next box:
 
 ```bash
 python3 -m brokerage_bot --walkthrough
