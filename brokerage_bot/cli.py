@@ -37,7 +37,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--walkthrough",
         action="store_true",
         help=(
-            "Interview mode: a short box before each pass. "
+            "Walkthrough: a short box before each pass explaining what it does. "
             "Pauses for Enter; use --no-pause in CI."
         ),
     )

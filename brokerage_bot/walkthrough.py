@@ -1,7 +1,7 @@
-"""Interview walkthrough boxes for the three-pass demo.
+"""Walkthrough boxes for the three-pass demo.
 
 Fake-data reminder first. Then a short box before transfers, YTD map,
-and journal. Talk-out-loud hints only — no firm SOP dump.
+and journal that says what that pass is doing.
 """
 
 from __future__ import annotations
@@ -16,23 +16,23 @@ from typing import TextIO
 class StageBanner:
     title: str
     lines: tuple[str, ...]
-    say_this: str
+    summary: str
 
     def __post_init__(self) -> None:
         if not 2 <= len(self.lines) <= 4:
             raise ValueError(f"{self.title}: expected 2–4 body lines, got {len(self.lines)}")
-        if not self.say_this or "\n" in self.say_this:
-            raise ValueError(f"{self.title}: say_this must be a single non-empty line")
+        if not self.summary or "\n" in self.summary:
+            raise ValueError(f"{self.title}: summary must be a single non-empty line")
 
 
 SYNTHETIC = StageBanner(
-    title="SYNTHETIC DATA — INTERVIEW DEMO",
+    title="SYNTHETIC DATA — DEMO",
     lines=(
         "All fake names and dollars — nothing from a real client.",
         "Bruce Wayne, masked accounts, dummy GLs.",
         "Just a demo. I'm not touching real books.",
     ),
-    say_this="All fake names and dollars — nothing from a real client.",
+    summary="Fake data first. Then transfers, the YTD map, and the journal.",
 )
 
 TRANSFERS = StageBanner(
@@ -42,7 +42,7 @@ TRANSFERS = StageBanner(
         "Dividends, interest, and trades stay off this list.",
         "I'm not changing balances. This is just the original list.",
     ),
-    say_this="Money in/out separate from dividends.",
+    summary="I flag money in and out. Dividends and trades stay off the list.",
 )
 
 YTD_MAP = StageBanner(
@@ -52,7 +52,7 @@ YTD_MAP = StageBanner(
         "Blank cell? That's a 0. I don't guess.",
         "Income/gain rows (the 3000s) flip sign so they match the books.",
     ),
-    say_this="Same order as the original list. I don't guess.",
+    summary="I keep statement numbers in the original row order. Blanks become 0.",
 )
 
 JOURNAL = StageBanner(
@@ -62,7 +62,7 @@ JOURNAL = StageBanner(
         "Then a 9999 plug so both sides match.",
         "Debits equal credits. That's it.",
     ),
-    say_this="This part balances.",
+    summary="I write the difference as debit or credit and plug so both sides match.",
 )
 
 # Shown between transfers → YTD map → journal (after the synthetic opener).
@@ -74,8 +74,8 @@ PIPELINE_STAGES: tuple[tuple[str, StageBanner], ...] = (
 
 
 def render_box(banner: StageBanner) -> str:
-    """Return a 2–4 line boxed banner plus a one-line say-this hint."""
-    body = [banner.title, *banner.lines, "", f"Say this: {banner.say_this}"]
+    """Return a 2–4 line boxed banner plus one line on what this stage does."""
+    body = [banner.title, *banner.lines, "", banner.summary]
     width = max(len(line) for line in body)
     top = "+" + "-" * (width + 2) + "+"
     bottom = top
