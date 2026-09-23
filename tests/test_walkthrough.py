@@ -97,7 +97,7 @@ class WalkthroughCliTests(unittest.TestCase):
         default = build_parser().parse_args([])
         self.assertFalse(default.walkthrough)
         self.assertFalse(default.no_pause)
-        help_text = build_parser().format_help()
+        help_text = " ".join(build_parser().format_help().split())
         self.assertNotIn("Interview", help_text)
         self.assertIn("explaining what it does", help_text)
 
