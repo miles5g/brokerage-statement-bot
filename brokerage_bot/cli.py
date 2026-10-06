@@ -17,7 +17,7 @@ def build_parser() -> argparse.ArgumentParser:
         prog="python3 -m brokerage_bot",
         description=(
             "Synthetic brokerage statement updater (portfolio demo). "
-            "Runs transfers → YTD map → journal. Does not post to a real ledger."
+            "Runs transfers -> YTD map -> journal. Does not post to a real ledger."
         ),
     )
     parser.add_argument(
@@ -85,19 +85,19 @@ def _pass_summaries(result) -> dict[str, str]:
         ),
         "ytd": (
             f"YTD map: {len(result.ytd.rows)} rows, 1:1 paste column; "
-            f"sign-flip on {flipped} income/gain rows; missing→0 on {missing}."
+            f"sign-flip on {flipped} income/gain rows; missing->0 on {missing}."
         ),
         "journal": (
             f"Journal: {len(result.journal.lines)} lines; "
             f"Dr {format_dollars(result.journal.total_debit)} = "
             f"Cr {format_dollars(result.journal.total_credit)}; "
-            f"plug {format_dollars(result.journal.plug_amount)}."
+            f"in suspense {format_dollars(result.journal.plug_amount)}."
         ),
     }
 
 
 def _print_report(pass_name: str, result) -> None:
-    print("brokerage_bot — portfolio demo — SYNTHETIC DATA ONLY")
+    print("brokerage_bot: portfolio demo: SYNTHETIC DATA ONLY")
     print("Transfers pass does not update balances.")
     summaries = _pass_summaries(result)
     if pass_name in {"all", "transfers"}:

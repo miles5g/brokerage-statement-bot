@@ -17,8 +17,9 @@ class ReadmeDemoTests(unittest.TestCase):
         block = match.group(1)
         lines = [ln.strip() for ln in block.splitlines() if ln.strip()]
         self.assertEqual(lines, [
+            "git clone https://github.com/miles5g/brokerage-statement-bot.git",
+            "cd brokerage-statement-bot",
             "python3 -m brokerage_bot",
-            "python3 -m unittest discover -s tests -v",
         ])
         self.assertNotRegex(text, r"(?m)^python -m ")
 

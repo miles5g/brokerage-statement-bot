@@ -71,7 +71,7 @@ def run_pipeline(
     ledger_rows = load_tabular(ledger)
     statement_rows = load_tabular(statement_src) if statement_src else None
     # Prefer a dedicated statement file when the ledger already has the column
-    # as well — dedicated file is the positional source of truth.
+    # as well: dedicated file is the positional source of truth.
     statement_values: list[Any] | None
     if statement_rows is not None:
         statement_values = statement_rows
@@ -157,21 +157,21 @@ def _summary_markdown(
     transfer_lines = "\n".join(
         f"- {line.date} | {line.entity} | {line.category} | "
         f"{format_dollars(line.amount)} | {line.record_action} | "
-        f"{'|'.join(line.flags) or '—'}"
+        f"{'|'.join(line.flags) or '-'}"
         for line in transfers.lines
     )
     ytd_lines = "\n".join(
         f"- {row.row_order}. {row.entity} {row.gl_code} {row.gl_name}: "
-        f"raw {format_dollars(row.statement_ytd_raw)} → mapped "
+        f"raw {format_dollars(row.statement_ytd_raw)} -> mapped "
         f"{format_dollars(row.statement_ytd_mapped)}"
         f"{' (sign-flip)' if row.sign_flipped else ''}"
-        f"{' [missing→0]' if row.missing_statement else ''}"
+        f"{' [missing->0]' if row.missing_statement else ''}"
         for row in ytd.rows
     )
     journal_lines = "\n".join(
         f"- {line.line}. {line.gl_code} {line.gl_name}: "
         f"Dr {format_dollars(line.debit)} / Cr {format_dollars(line.credit)}"
-        f"{'  ← balancing' if line.is_balancing else ''}"
+        f"{'  â† balancing' if line.is_balancing else ''}"
         for line in journal.lines
     )
     return f"""# Month-end run summary (synthetic demo)
@@ -198,7 +198,7 @@ YTD flags: {', '.join(ytd.flags) if ytd.flags else 'none'}
 
 Balanced: **{journal.is_balanced}**
 Debits {format_dollars(journal.total_debit)} = Credits {format_dollars(journal.total_credit)}
-Plug {format_dollars(journal.plug_amount)}
+Suspense {format_dollars(journal.plug_amount)}
 
 {journal_lines}
 """

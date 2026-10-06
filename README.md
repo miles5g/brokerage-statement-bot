@@ -1,42 +1,10 @@
 # Brokerage Statement Bot
 
-**30-second demo**
+Updates the books from a month-end brokerage statement: finds the money that moved in and out, lines up new balances with the ledger, and writes a balanced journal.
 
-```bash
-python3 -m brokerage_bot
-python3 -m unittest discover -s tests -v
-```
+This is a rebuild of a month-end workflow I run at work, on fake data so it can be public. At work an LLM reads the PDF statements. This demo starts from the extracted numbers so it runs offline.
 
-Writes transfer review, YTD paste column, and a balanced journal into `output/`. Stdlib Python 3.10+.
-
-**Walkthrough** — stepped demo of the three passes: transfers, then YTD map, then journal. Each box explains what that pass is doing.
-
-```bash
-python3 -m brokerage_bot --walkthrough
-```
-
-Press Enter after each box. Add `--no-pause` for CI (`python3 -m brokerage_bot --walkthrough --no-pause`). The command at the top stays the fast 30-second demo.
-
----
-
-**Portfolio demo** — three-pass month-end pattern: transfers → YTD map → journal.
-
-**Not** production software and **not** affiliated with any employer, broker, or fund admin. Pattern only — no firm SOP text.
-
-## What it does
-
-1. **Transfers pass** — flag wires, contributions/distributions, security transfers, margin paydowns (not ordinary dividends/interest/market moves)
-2. **YTD map pass** — map statement/YTD values 1:1 to GL row order; missing → 0; demo 3000-series sign-flip
-3. **Journal pass** — difference → Debit/Credit with balancing plug
-
-## Synthetic-data rules
-
-- People/entities: Bruce Wayne, Peter Parker, Wayne Family Trust, Parker Holdings LLC
-- Accounts: masked `****1234` style
-- Amounts: whole dollars only
-- GLs: dummy catalog (`1200` Cash, `1210` Equities, `3100`/`3200`/`3300` income, `9999` plug)
-
-## Quickstart
+## Run it (30 seconds)
 
 ```bash
 git clone https://github.com/miles5g/brokerage-statement-bot.git
@@ -44,12 +12,34 @@ cd brokerage-statement-bot
 python3 -m brokerage_bot
 ```
 
-Artifacts: `output/transfers.csv`, `ytd_paste_column.txt`, `journal.csv`, `run_summary.md`.
+Python 3.10+. Nothing to install. On Windows use `py -m brokerage_bot`.
 
-## Status
+Want each step explained as it runs? `python3 -m brokerage_bot --walkthrough` (press Enter between steps, or use `python3 -m brokerage_bot --walkthrough --no-pause`).
 
-Runnable. Tests cover transfer detection, row-order mapping, journal balance, scrub guards, and walkthrough `--no-pause`.
+## What happens
 
-## Author
+1. **Transfers.** Lists wires, contributions, distributions, and transfers between entities. Anything large, ambiguous, or missing a counterparty gets flagged for review. Dividends and trades are not transfers, so they are skipped.
+2. **Balance map.** Lines up each statement balance with the matching ledger account, in ledger order, so the column can be pasted straight in. Blank balances become 0. Income accounts flip sign to match how the books store them.
+3. **Journal.** New balance minus old balance becomes a debit or credit. Each entity balances on its own. Any change the statement does not explain goes to a Suspense line for that entity, which the reviewer clears against the transfers list.
 
-Miles Johnson — [@miles5g](https://github.com/miles5g)
+## What you get
+
+```
+Transfers: 10 to record (5 review flags); 10 ordinary lines skipped.
+YTD map: 13 rows, 1:1 paste column; sign-flip on 5 income/gain rows; missing->0 on 1.
+Journal: 11 lines; Dr $165,000 = Cr $165,000; in suspense $151,000.
+```
+
+Files land in `output/`: `transfers.csv`, `ytd_paste_column.txt`, `journal.csv`, `run_summary.md`.
+
+## Tests
+
+```bash
+python3 -m unittest discover -s tests
+```
+
+Covers transfer detection, row order, sign flips, per-entity balance, and a check that no real names are in the repo.
+
+## Data
+
+All fake: comic book names, masked account numbers, round dollar amounts, a made-up chart of accounts.

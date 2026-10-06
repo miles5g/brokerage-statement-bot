@@ -11,7 +11,7 @@ from dataclasses import dataclass
 INCOME_GL_MIN = 3000
 INCOME_GL_MAX = 3999
 BALANCING_GL_CODE = 9999
-BALANCING_GL_NAME = "Balancing (demo plug)"
+BALANCING_GL_NAME = "Suspense (review before posting)"
 
 
 @dataclass(frozen=True)
@@ -45,7 +45,7 @@ gain as positive "income received." This demo's workpaper uses a
 debit-positive convention: income and gain accounts store credit
 balances as negative numbers.
 
-For GL codes 3000–3999 (Dividend Income 3100, Interest Income 3200,
+For GL codes 3000-3999 (Dividend Income 3100, Interest Income 3200,
 Realized Gain/Loss 3300, and any other demo income/gain account in
 that range):
 

@@ -71,7 +71,7 @@ class WalkthroughBannerTests(unittest.TestCase):
             SYNTHETIC.summary,
             "Fake data first. Then transfers, the YTD map, and the journal.",
         )
-        self.assertIn("All fake names and dollars — nothing from a real client.", SYNTHETIC.lines)
+        self.assertIn("All fake names and dollars: nothing from a real client.", SYNTHETIC.lines)
         self.assertEqual(
             TRANSFERS.summary,
             "I flag money in and out. Dividends and trades stay off the list.",
@@ -84,7 +84,7 @@ class WalkthroughBannerTests(unittest.TestCase):
         )
         self.assertEqual(
             JOURNAL.summary,
-            "I write the difference as debit or credit and plug so both sides match.",
+            "I write the difference as debit or credit and park the rest in suspense.",
         )
         self.assertIn("I'm", text)
 
@@ -117,7 +117,7 @@ class WalkthroughCliTests(unittest.TestCase):
                 )
         self.assertEqual(code, 0)
         out = buf.getvalue()
-        self.assertIn("SYNTHETIC DATA — DEMO", out)
+        self.assertIn("SYNTHETIC DATA: DEMO", out)
         self.assertIn("TRANSFERS", out)
         self.assertIn("YTD MAP", out)
         self.assertIn("JOURNAL", out)

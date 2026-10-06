@@ -62,7 +62,7 @@ class JournalEntry:
 
 
 def split_debit_credit(difference: int) -> tuple[int, int]:
-    """Positive difference → debit; negative difference → credit (as a positive)."""
+    """Positive difference -> debit; negative difference -> credit (as a positive)."""
     if difference > 0:
         return difference, 0
     if difference < 0:
@@ -97,31 +97,35 @@ def build_journal(
         )
         line_no += 1
 
-    debit_total = sum(line.debit for line in entry.lines)
-    credit_total = sum(line.credit for line in entry.lines)
-    plug = debit_total - credit_total
-    if plug != 0:
-        entry.flags.append("UNBALANCED_BEFORE_PLUG")
-        entry.plug_amount = abs(plug)
+    # Each entity is its own set of books, so each one balances on its own.
+    entities = list(dict.fromkeys(line.entity for line in entry.lines))
+    for entity in entities:
+        lines = [line for line in entry.lines if line.entity == entity and not line.is_balancing]
+        plug = sum(line.debit for line in lines) - sum(line.credit for line in lines)
+        if plug == 0:
+            continue
+        line_flags = ["UNBALANCED_BEFORE_PLUG"]
         if abs(plug) >= LARGE_PLUG_THRESHOLD:
-            entry.flags.append("LARGE_PLUG")
-        if plug > 0:
-            plug_debit, plug_credit = 0, plug
-        else:
-            plug_debit, plug_credit = -plug, 0
+            line_flags.append("LARGE_PLUG")
+        for flag in line_flags:
+            if flag not in entry.flags:
+                entry.flags.append(flag)
+        entry.plug_amount += abs(plug)
+        plug_debit, plug_credit = (0, plug) if plug > 0 else (-plug, 0)
         entry.lines.append(
             JournalLine(
                 line=line_no,
-                entity="ALL",
+                entity=entity,
                 gl_code=BALANCING_GL_CODE,
                 gl_name=BALANCING_GL_NAME,
                 debit=plug_debit,
                 credit=plug_credit,
-                memo="Balancing row — review transfers before posting (demo plug)",
-                flags=tuple(entry.flags),
+                memo="Unexplained change: match to transfers list before posting",
+                flags=tuple(line_flags),
                 is_balancing=True,
             )
         )
+        line_no += 1
 
     entry.total_debit = sum(line.debit for line in entry.lines)
     entry.total_credit = sum(line.credit for line in entry.lines)

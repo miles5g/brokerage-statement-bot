@@ -91,7 +91,7 @@ def scrub_record(record: dict[str, Any], text_fields: Iterable[str]) -> None:
 
 
 def collect_scrub_issues(text: str, *, field: str) -> list[str]:
-    """Return issue labels without raising — used for review flags."""
+    """Return issue labels without raising: used for review flags."""
     issues: list[str] = []
     if not text:
         return issues

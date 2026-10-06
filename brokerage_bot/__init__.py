@@ -1,4 +1,4 @@
-"""Synthetic brokerage statement updater — portfolio demo only."""
+"""Synthetic brokerage statement updater: portfolio demo only."""
 
 from brokerage_bot.catalog import DUMMY_GL_ACCOUNTS, SIGN_FLIP_RULE
 from brokerage_bot.journal import build_journal

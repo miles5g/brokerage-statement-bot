@@ -1,4 +1,4 @@
-"""Row-aligned YTD mapping, 3000-series sign-flip, and missing→0."""
+"""Row-aligned YTD mapping, 3000-series sign-flip, and missing->0."""
 
 from __future__ import annotations
 

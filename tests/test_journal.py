@@ -55,7 +55,7 @@ class JournalTests(unittest.TestCase):
         self.assertTrue(plug.is_balancing)
         self.assertEqual(plug.gl_code, BALANCING_GL_CODE)
         self.assertIn("UNBALANCED_BEFORE_PLUG", entry.flags)
-        # 70000 debit vs 4000 credit → 66000 credit plug
+        # 70000 debit vs 4000 credit -> 66000 credit plug
         self.assertEqual(plug.credit, 66000)
         self.assertEqual(plug.debit, 0)
 
@@ -71,6 +71,19 @@ class JournalTests(unittest.TestCase):
         self.assertFalse(any(line.is_balancing for line in entry.lines))
         self.assertEqual(sum(line.debit for line in entry.lines), 4000)
         self.assertEqual(sum(line.credit for line in entry.lines), 4000)
+
+    def test_each_entity_balances_on_its_own(self):
+        entry = build_journal(
+            [
+                _mapped(gl_code=1200, prior=0, mapped=70000, entity="Wayne Family Trust"),
+                _mapped(gl_code=1200, prior=0, mapped=-30000, entity="Parker Holdings LLC"),
+            ]
+        )
+        for entity in ("Wayne Family Trust", "Parker Holdings LLC"):
+            lines = [line for line in entry.lines if line.entity == entity]
+            self.assertEqual(sum(l.debit for l in lines), sum(l.credit for l in lines), entity)
+        self.assertEqual(entry.plug_amount, 100000)
+        self.assertFalse(any(line.entity == "ALL" for line in entry.lines))
 
     def test_plug_can_land_on_debit_side(self):
         entry = build_journal(
