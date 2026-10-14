@@ -22,7 +22,7 @@ Want each step explained as it runs? `python3 -m brokerage_bot --walkthrough` (p
 
 ## What happens
 
-1. **Transfers.** Lists wires, contributions, distributions, and transfers between entities. The tool flags anything large, ambiguous, or missing a counterparty. A person approves or edits those items before anything is final. Dividends and trades are not transfers, so they are skipped.
+1. **Transfers.** Lists wires, contributions, distributions, and transfers between entities. The tool flags anything large, ambiguous, or missing a counterparty. A person approves or edits those items before anything is final. On the web demo, downloads stay locked until that is done. Dividends and trades are not transfers, so they are skipped.
 2. **Balance map.** Lines up each statement balance with the matching ledger account, in ledger order, so the column can be pasted straight in. Blank balances become 0. Income accounts flip sign to match how the books store them.
 3. **Journal.** New balance minus old balance becomes a debit or credit. Each entity balances on its own. Any change the statement does not explain goes to a Suspense line for that entity. A person approves or edits that line before it is final.
 

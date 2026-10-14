@@ -112,6 +112,20 @@ class ScrubGuardTests(unittest.TestCase):
                 [0],
             )
 
+    def test_public_tree_omits_employer_name(self):
+        # Safety scans stay generic. The firm name is not stored in this repo.
+        token = "".join(("gu", "rs", "ey"))
+        root = Path(__file__).resolve().parents[1]
+        skip = {".git", "__pycache__", "output", ".venv", "venv"}
+        allowed = {".py", ".md", ".js", ".html", ".css", ".yml", ".yaml", ".csv", ".json", ".txt", ".toml"}
+        for path in root.rglob("*"):
+            if not path.is_file() or any(part in skip for part in path.parts):
+                continue
+            if path.suffix.lower() not in allowed and path.suffix.lower() != ".xlsx":
+                continue
+            text = path.read_bytes().decode("utf-8", errors="ignore").lower()
+            self.assertNotIn(token, text, str(path.relative_to(root)))
+
     def test_shipped_fixtures_pass_scrub(self):
         activities = load_tabular(FIXTURES / "statement_activity.csv")
         json_rows = load_tabular(FIXTURES / "statement_activity.json")

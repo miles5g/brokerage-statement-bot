@@ -230,6 +230,35 @@ tr.review td:first-child { padding-left: 7px; }
   font-weight: 600;
 }
 
+.row-action,
+.note-input {
+  font: inherit;
+  font-size: 14px;
+}
+
+.row-action {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.row-action:disabled {
+  color: var(--muted);
+  cursor: default;
+}
+
+.note-input {
+  width: 14rem;
+  max-width: 100%;
+  padding: 4px 6px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+
 .files {
   margin: 16px 0 0;
   padding-left: 18px;
