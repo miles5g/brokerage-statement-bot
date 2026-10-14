@@ -23,6 +23,13 @@ class ReadmeDemoTests(unittest.TestCase):
         ])
         self.assertNotRegex(text, r"(?m)^python -m ")
 
+    def test_demo_link_is_the_first_line(self):
+        text = README.read_text(encoding="utf-8")
+        self.assertEqual(
+            text.splitlines()[0],
+            "**[Open the demo](https://miles5g.github.io/brokerage-statement-bot/)**",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

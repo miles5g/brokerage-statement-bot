@@ -1,0 +1,253 @@
+:root {
+  --bg: #f3f4f6;
+  --surface: #ffffff;
+  --ink: #1c2430;
+  --muted: #5c6775;
+  --line: #d5dbe3;
+  --accent: #1f4e79;
+  --accent-hover: #173a5c;
+  --review: #7a4516;
+  --soft: #f7f8fa;
+}
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.5 "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.top {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.top-inner,
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.top-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.sample-note {
+  margin: 0;
+  font-size: 14px;
+  border: 1px solid var(--line);
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.wrap { padding-top: 28px; padding-bottom: 64px; }
+
+.banner {
+  margin: 0 0 18px;
+  font-size: 15px;
+}
+
+.steps {
+  display: flex;
+  gap: 22px;
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.steps .current {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.steps .num { margin-right: 6px; }
+
+.steps .current .num { color: var(--accent); }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 28px 32px 32px;
+}
+
+h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.lead {
+  margin: 0;
+  max-width: 38rem;
+}
+
+.hint,
+.note,
+.saved {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.actions { margin-top: 28px; }
+
+button.primary {
+  appearance: none;
+  background: var(--accent);
+  color: #fff;
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  padding: 10px 16px;
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+button.primary:hover { background: var(--accent-hover); }
+
+button.primary:disabled {
+  background: #8aa0b5;
+  border-color: #8aa0b5;
+  cursor: default;
+}
+
+button.link,
+button.back {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.alt { margin: 14px 0 0; }
+
+.file-name { margin: 18px 0 0; }
+
+.facts {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: 8px 16px;
+  margin: 22px 0 0;
+}
+
+.facts dt { color: var(--muted); }
+
+.facts dd { margin: 0; }
+
+.error {
+  margin: 18px 0 0;
+  padding: 12px 14px;
+  border: 1px solid #e0c8b8;
+  background: #fbf7f4;
+  color: #6b3a22;
+}
+
+.summary { margin: 20px 0 4px; }
+
+.summary p { margin: 0 0 6px; }
+
+.block { margin-top: 28px; }
+
+h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.table-wrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+th {
+  background: var(--soft);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+td.num,
+th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+td.date { white-space: nowrap; }
+
+.sub {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+tr.review td:first-child { border-left: 3px solid var(--review); }
+
+tr.review td:first-child { padding-left: 7px; }
+
+.review-word {
+  color: var(--review);
+  font-weight: 600;
+}
+
+.files {
+  margin: 16px 0 0;
+  padding-left: 18px;
+}
+
+.files li { margin: 2px 0; }
+
+@media (max-width: 640px) {
+  .top-inner,
+  .wrap { padding-left: 16px; padding-right: 16px; }
+
+  .top-inner { align-items: flex-start; flex-direction: column; }
+
+  .panel { padding: 22px 16px 24px; }
+
+  .facts { grid-template-columns: 1fr; gap: 2px; }
+
+  .facts div { margin-bottom: 8px; }
+
+  .steps { gap: 12px; flex-wrap: wrap; }
+}

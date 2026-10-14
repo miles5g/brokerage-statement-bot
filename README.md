@@ -1,3 +1,7 @@
+**[Open the demo](https://miles5g.github.io/brokerage-statement-bot/)**
+
+Open the demo to run the sample month-end update in the browser: transfers, the balance map, and a balanced journal.
+
 # Brokerage Statement Bot
 
 Updates the books from a month-end brokerage statement: finds the money that moved in and out, lines up new balances with the ledger, and writes a balanced journal.
@@ -38,7 +42,7 @@ Files land in `output/`: `transfers.csv`, `ytd_paste_column.txt`, `journal.csv`,
 python3 -m unittest discover -s tests
 ```
 
-Covers transfer detection, row order, sign flips, per-entity balance, and a check that no real names are in the repo.
+Covers transfer detection, row order, sign flips, per-entity balance, and a check that no real names are in the repo. If Node is installed, the suite also checks the browser pipeline against this command's output.
 
 ## Data
 
