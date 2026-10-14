@@ -255,7 +255,7 @@
       '<div class="summary">' +
       "<p>Transfers to record: " +
       transfers.lines.length +
-      ". To review: " +
+      ". Flagged: " +
       reviewCount(transfers) +
       ". Ordinary lines skipped: " +
       transfers.skippedOrdinary +
@@ -279,7 +279,7 @@
       "</div>";
     return (
       '<h2 id="step-title" tabindex="-1">Review the results</h2>' +
-      '<p class="lead">Review the transfers, the balance column, and the journal.</p>' +
+      '<p class="lead">The tool flags items. A person approves or edits them before anything is final.</p>' +
       summary +
       transfersTable(transfers) +
       ytdTable(ytd) +
@@ -310,7 +310,7 @@
           "</td><td>" +
           esc(counterparty(line)) +
           "</td><td>" +
-          (review ? '<span class="review-word">Review</span>' : "Record") +
+          (review ? '<span class="review-word">Flagged</span>' : "Not flagged") +
           (why ? '<span class="sub">' + esc(why) + "</span>" : "") +
           "</td></tr>"
         );
@@ -320,11 +320,11 @@
     return (
       '<div class="block"><h3 id="transfers-heading">Transfers</h3>' +
       '<div class="table-wrap"><table aria-labelledby="transfers-heading"><thead><tr>' +
-      "<th>Date</th><th>Entity</th><th>What</th><th class=\"num\">Amount</th><th>Counterparty</th><th>Action</th>" +
+      "<th>Date</th><th>Entity</th><th>What</th><th class=\"num\">Amount</th><th>Counterparty</th><th>Flag</th>" +
       "</tr></thead><tbody>" +
       rows +
       "</tbody></table></div>" +
-      '<p class="note">This list does not change the balances.</p></div>'
+      '<p class="note">This list does not change the balances. The tool flags items. A person approves or edits them before anything is final.</p></div>'
     );
   }
 
@@ -404,7 +404,7 @@
       "</tr></thead><tbody>" +
       rows +
       "</tbody></table></div>" +
-      '<p class="note">Each entity balances on its own. Suspense is the change the statement does not explain.</p></div>'
+      '<p class="note">Each entity balances on its own. Suspense is flagged because the statement does not explain the change. A person approves or edits it before it is final.</p></div>'
     );
   }
 
