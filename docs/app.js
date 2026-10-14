@@ -17,6 +17,8 @@
     error: "",
     saved: false,
     busy: false,
+    decisions: {},
+    notes: {},
   };
 
   var STEPS = ["Load", "Run", "Results", "Download"];
@@ -98,6 +100,85 @@
     return line.counterparty_entity || line.counterparty_account || "";
   }
 
+  function flaggedItems() {
+    if (!state.result) return [];
+    var items = [];
+    state.result.transfers.lines.forEach(function (line, index) {
+      if (line.record_action !== "REVIEW") return;
+      items.push({
+        id: "transfer-" + index,
+        label: line.date + " " + line.entity + " " + (CATEGORY_LABELS[line.category] || line.category),
+        why: reasons(line.flags) || "Flagged",
+      });
+    });
+    state.result.ytd.rows.forEach(function (row) {
+      var why = reasons(row.flags);
+      if (!why) return;
+      items.push({
+        id: "balance-" + row.row_order,
+        label: "Balance row " + row.row_order + " " + row.gl_code + " " + row.gl_name,
+        why: why,
+      });
+    });
+    state.result.journal.lines.forEach(function (line) {
+      if (!line.is_balancing) return;
+      items.push({
+        id: "suspense-" + line.line,
+        label: "Suspense " + line.entity,
+        why: reasons(line.flags) || "Unexplained change",
+      });
+    });
+    return items;
+  }
+
+  function reviewComplete() {
+    return flaggedItems().every(function (item) {
+      return state.decisions[item.id];
+    });
+  }
+
+  function reviewStatusText() {
+    var items = flaggedItems();
+    if (!items.length) return "Nothing is flagged.";
+    if (reviewComplete()) return "A person has approved or edited every flagged item.";
+    return "Downloads stay locked until every flagged item is approved.";
+  }
+
+  function refreshReview() {
+    var status = document.getElementById("review-status");
+    if (status) status.textContent = reviewStatusText();
+    var ready = reviewComplete();
+    var next = document.querySelector("[data-action='next']");
+    var download = document.querySelector("[data-action='download']");
+    if (next) next.disabled = !ready;
+    if (download) download.disabled = !ready;
+  }
+
+  function bindReviewControls() {
+    var notes = app.querySelectorAll("[data-note-for]");
+    for (var i = 0; i < notes.length; i++) {
+      notes[i].addEventListener("input", function (event) {
+        var input = event.target;
+        var id = input.getAttribute("data-note-for");
+        state.notes[id] = input.value;
+        if (input.value.trim()) state.decisions[id] = "edited";
+        else if (state.decisions[id] === "edited") delete state.decisions[id];
+        refreshReview();
+      });
+    }
+    var buttons = app.querySelectorAll("[data-approve]");
+    for (var j = 0; j < buttons.length; j++) {
+      buttons[j].addEventListener("click", function (event) {
+        var button = event.currentTarget;
+        var id = button.getAttribute("data-approve");
+        state.decisions[id] = "approved";
+        button.disabled = true;
+        button.textContent = "Approved";
+        refreshReview();
+      });
+    }
+  }
+
   function reviewCount(transfers) {
     var count = 0;
     for (var i = 0; i < transfers.lines.length; i++) {
@@ -172,6 +253,8 @@
       '<section class="panel">' +
       body() +
       "</section>";
+    bindReviewControls();
+    refreshReview();
     var title = document.getElementById("step-title");
     if (title) title.focus();
   }
@@ -279,12 +362,15 @@
       "</div>";
     return (
       '<h2 id="step-title" tabindex="-1">Review the results</h2>' +
-      '<p class="lead">The tool flags items. A person approves or edits them before anything is final.</p>' +
+      '<p class="lead" id="review-status"></p>' +
+      flaggedTable() +
       summary +
       transfersTable(transfers) +
       ytdTable(ytd) +
       journalTable(journal) +
-      '<div class="actions"><button class="primary" type="button" data-action="next">Continue</button></div>' +
+      '<div class="actions"><button class="primary" type="button" data-action="next"' +
+      (reviewComplete() ? "" : " disabled") +
+      ">Continue</button></div>" +
       '<p class="alt"><button class="back" type="button" data-action="back">Back</button></p>'
     );
   }
@@ -324,7 +410,7 @@
       "</tr></thead><tbody>" +
       rows +
       "</tbody></table></div>" +
-      '<p class="note">This list does not change the balances. The tool flags items. A person approves or edits them before anything is final.</p></div>'
+      '<p class="note">This list does not change the balances.</p></div>'
     );
   }
 
@@ -404,7 +490,45 @@
       "</tr></thead><tbody>" +
       rows +
       "</tbody></table></div>" +
-      '<p class="note">Each entity balances on its own. Suspense is flagged because the statement does not explain the change. A person approves or edits it before it is final.</p></div>'
+      '<p class="note">Each entity balances on its own. Suspense is the change the statement does not explain.</p></div>'
+    );
+  }
+
+  function flaggedTable() {
+    var items = flaggedItems();
+    if (!items.length) return "";
+    var rows = items
+      .map(function (item) {
+        var approved = state.decisions[item.id] === "approved";
+        var note = state.notes[item.id] || "";
+        return (
+          "<tr><td>" +
+          esc(item.label) +
+          "</td><td>" +
+          esc(item.why) +
+          '</td><td><input class="note-input" type="text" data-note-for="' +
+          esc(item.id) +
+          '" aria-label="Edit note for ' +
+          esc(item.label) +
+          '" placeholder="Edit note" value="' +
+          esc(note) +
+          '"></td><td><button type="button" class="row-action" data-approve="' +
+          esc(item.id) +
+          '"' +
+          (approved ? " disabled" : "") +
+          ">" +
+          (approved ? "Approved" : "Approve") +
+          "</button></td></tr>"
+        );
+      })
+      .join("");
+    return (
+      '<div class="block"><h3 id="flagged-heading">Flagged items</h3>' +
+      '<div class="table-wrap"><table aria-labelledby="flagged-heading"><thead><tr>' +
+      "<th>Item</th><th>Why</th><th>Note</th><th>Decision</th>" +
+      "</tr></thead><tbody>" +
+      rows +
+      "</tbody></table></div></div>"
     );
   }
 
@@ -420,7 +544,9 @@
       items +
       "</ul>" +
       (state.saved ? '<p class="saved">Saved month-end-output.zip.</p>' : "") +
-      '<div class="actions"><button class="primary" type="button" data-action="download">Download the files</button></div>' +
+      '<div class="actions"><button class="primary" type="button" data-action="download"' +
+      (reviewComplete() ? "" : " disabled") +
+      ">Download the files</button></div>" +
       '<p class="alt"><button class="back" type="button" data-action="back">Back</button></p>'
     );
   }
@@ -474,6 +600,8 @@
     state.error = "";
     try {
       state.result = pipeline.buildOutputFiles(state.activity, state.ledger, state.ytd);
+      state.decisions = {};
+      state.notes = {};
       state.saved = false;
       state.step = 3;
     } catch (err) {
@@ -483,6 +611,7 @@
   }
 
   function download() {
+    if (!reviewComplete()) return;
     var bytes = pipeline.createZip(state.result.files);
     var blob = new Blob([bytes], { type: "application/zip" });
     var url = URL.createObjectURL(blob);
@@ -508,6 +637,7 @@
     else if (action === "continue-upload") continueUpload();
     else if (action === "run") runUpdate();
     else if (action === "next") {
+      if (!reviewComplete()) return;
       state.step = 4;
       render();
     } else if (action === "download") download();
