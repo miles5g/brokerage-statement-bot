@@ -22,6 +22,19 @@ class ReadmeDemoTests(unittest.TestCase):
             "python3 -m brokerage_bot",
         ])
         self.assertNotRegex(text, r"(?m)^python -m ")
+        lowered = text.lower()
+        self.assertIn("public rebuild of the workflow pattern", lowered)
+        self.assertIn("not deployed or used at any employer", lowered)
+        self.assertNotIn("llm", lowered)
+        self.assertNotIn("at work", lowered)
+        self.assertIn("a person approves or edits", lowered)
+
+    def test_demo_link_is_the_first_line(self):
+        text = README.read_text(encoding="utf-8")
+        self.assertEqual(
+            text.splitlines()[0],
+            "**[Open the demo](https://miles5g.github.io/brokerage-statement-bot/)**",
+        )
 
 
 if __name__ == "__main__":

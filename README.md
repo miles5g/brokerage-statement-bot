@@ -1,8 +1,12 @@
+**[Open the demo](https://miles5g.github.io/brokerage-statement-bot/)**
+
+Open the demo to run the sample month-end update in the browser: transfers, the balance map, and a balanced journal.
+
 # Brokerage Statement Bot
 
 Updates the books from a month-end brokerage statement: finds the money that moved in and out, lines up new balances with the ledger, and writes a balanced journal.
 
-This is a rebuild of a month-end workflow I run at work, on fake data so it can be public. At work an LLM reads the PDF statements. This demo starts from the extracted numbers so it runs offline.
+This is a public rebuild of the workflow pattern, on sample data. This GitHub version was not deployed or used at any employer. It starts from the extracted numbers so it runs offline.
 
 ## Run it (30 seconds)
 
@@ -18,9 +22,9 @@ Want each step explained as it runs? `python3 -m brokerage_bot --walkthrough` (p
 
 ## What happens
 
-1. **Transfers.** Lists wires, contributions, distributions, and transfers between entities. Anything large, ambiguous, or missing a counterparty gets flagged for review. Dividends and trades are not transfers, so they are skipped.
+1. **Transfers.** Lists wires, contributions, distributions, and transfers between entities. The tool flags anything large, ambiguous, or missing a counterparty. A person approves or edits those items before anything is final. Dividends and trades are not transfers, so they are skipped.
 2. **Balance map.** Lines up each statement balance with the matching ledger account, in ledger order, so the column can be pasted straight in. Blank balances become 0. Income accounts flip sign to match how the books store them.
-3. **Journal.** New balance minus old balance becomes a debit or credit. Each entity balances on its own. Any change the statement does not explain goes to a Suspense line for that entity, which the reviewer clears against the transfers list.
+3. **Journal.** New balance minus old balance becomes a debit or credit. Each entity balances on its own. Any change the statement does not explain goes to a Suspense line for that entity. A person approves or edits that line before it is final.
 
 ## What you get
 
@@ -38,7 +42,7 @@ Files land in `output/`: `transfers.csv`, `ytd_paste_column.txt`, `journal.csv`,
 python3 -m unittest discover -s tests
 ```
 
-Covers transfer detection, row order, sign flips, per-entity balance, and a check that no real names are in the repo.
+Covers transfer detection, row order, sign flips, per-entity balance, and a check that no real names are in the repo. If Node is installed, the suite also checks the browser pipeline against this command's output.
 
 ## Data
 

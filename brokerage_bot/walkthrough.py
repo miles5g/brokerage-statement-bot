@@ -41,6 +41,7 @@ TRANSFERS = StageBanner(
         "Wires, contributions, distributions, security transfers, paydowns.",
         "Dividends, interest, and trades stay off this list.",
         "I'm not changing balances. This is just the original list.",
+        "The tool flags items. A person approves or edits before anything is final.",
     ),
     summary="I flag money in and out. Dividends and trades stay off the list.",
 )
@@ -60,7 +61,7 @@ JOURNAL = StageBanner(
     lines=(
         "New number minus old number. That's the debit or credit.",
         "Anything unexplained goes to 9999 Suspense, per entity.",
-        "Each entity balances. Suspense gets matched to transfers.",
+        "Each entity balances. A person approves or edits suspense before it is final.",
     ),
     summary="I write the difference as debit or credit and park the rest in suspense.",
 )

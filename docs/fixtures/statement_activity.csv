@@ -1,0 +1,21 @@
+date,entity,account,activity_type,description,amount,security,quantity,counterparty_entity,counterparty_account
+2026-08-01,Wayne Family Trust,****1234,dividend,Gotham Utilities qualified dividend,1000,Gotham Utilities,0,,
+2026-08-03,Parker Holdings LLC,****5678,interest,Sweep interest,1000,,,
+2026-08-05,Wayne Family Trust,****1234,interest,Sweep interest,2000,,,
+2026-08-07,Parker Holdings LLC,****5678,contribution,ACH contribution from Peter Parker,50000,,,Peter Parker,****9012
+2026-08-08,Wayne Family Trust,****1234,wire_in,Incoming wire contribution from Bruce Wayne,100000,,,Wayne Family Trust,****4321
+2026-08-10,Parker Holdings LLC,****5678,cash_transfer,Cash journal to Wayne Family Trust,-15000,,,Wayne Family Trust,****1234
+2026-08-10,Wayne Family Trust,****1234,cash_transfer,Cash journal from Parker Holdings LLC,15000,,,Parker Holdings LLC,****5678
+2026-08-12,Wayne Family Trust,****1234,buy,Buy 100 Gotham Steel,-50000,Gotham Steel,100,,
+2026-08-15,Wayne Family Trust,****1234,security_transfer,Incoming share journal 50 Metropolis REIT,25000,Metropolis REIT,50,,
+2026-08-16,Parker Holdings LLC,****5678,dividend,Bugle Bond Fund dividend,4000,Bugle Bond Fund,0,,
+2026-08-18,Wayne Family Trust,****1234,margin_paydown,Margin loan paydown,10000,,,
+2026-08-20,Wayne Family Trust,****1234,distribution,Outgoing wire beneficiary distribution to Bruce Wayne,-20000,,,Bruce Wayne,****4321
+2026-08-22,Wayne Family Trust,****1234,market_move,Unrealized mark on Gotham Steel,15000,Gotham Steel,0,,
+2026-08-25,Parker Holdings LLC,****5678,distribution,Outgoing wire owner distribution to Peter Parker,-5000,,,Peter Parker,****9012
+2026-08-27,Parker Holdings LLC,****5678,unknown,Advisor journal unspecified,1000,,,
+2026-08-28,Wayne Family Trust,****1234,dividend,Daily Planet Inc dividend,3000,Daily Planet Inc,0,,
+2026-08-29,Wayne Family Trust,****1234,sell,Sell Daily Planet lot,40000,Daily Planet Inc,200,,
+2026-08-29,Wayne Family Trust,****1234,realized_gain,Realized gain on Daily Planet lot,8000,Daily Planet Inc,0,,
+2026-08-30,Parker Holdings LLC,****5678,margin_interest,Margin interest charge,-1000,,,
+2026-08-31,Wayne Family Trust,****1234,wire_out,Outgoing wire to external counterparty not listed,-1000,,,
